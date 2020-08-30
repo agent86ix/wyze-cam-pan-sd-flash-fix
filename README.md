@@ -16,7 +16,7 @@ Insert an SD card (used for backing up the previous bootloader image)
 
 Follow the instructions to set up [WyzeUpdater](https://github.com/HclX/WyzeUpdater) so that it can find your camera in `wyze_updater.py list`. 
 
-Then you can download the latest release of the binary bundle, and tell WyzeUpdater to push it to your camera.  The instructions may vary if WyzeUpdater changes, but as of this writing:
+Then you can download the latest release of the binary bundle [from this page](https://github.com/agent86ix/wyze-cam-pan-sd-flash-fix/releases), and tell WyzeUpdater to push it to your camera.  The instructions may vary if WyzeUpdater changes, but as of this writing:
 
 ```
 python wyze_updater.py update -d $CAMERA_MAC -f path/to/pan-fix.tar
