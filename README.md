@@ -19,7 +19,7 @@ Follow the instructions to set up [WyzeUpdater](https://github.com/HclX/WyzeUpda
 Then you can download the latest release of the binary bundle [from this page](https://github.com/agent86ix/wyze-cam-pan-sd-flash-fix/releases), and tell WyzeUpdater to push it to your camera.  The instructions may vary if WyzeUpdater changes, but as of this writing:
 
 ```
-python wyze_updater.py update -d $CAMERA_MAC -f path/to/pan-fix.tar
+python wyze_updater.py update -p 18080 -d $CAMERA_MAC -f path/to/pan-fix.tar
 ```
 
 ## Advanced Usage
