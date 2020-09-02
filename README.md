@@ -22,7 +22,13 @@ Then you can download the latest release of the binary bundle [from this page](h
 python wyze_updater.py update -p 18080 -d $CAMERA_MAC -f path/to/pan-fix.tar
 ```
 
+This will start a small web server on your machine, and then attempt to trigger the same update flow as the app on your camera.  You should see a couple of requests printed from the camera, (one ending in `firmware.bin`) and then the camera should reboot shortly after.  Once it has, you can exit (Ctrl-C) the WyzeUpdater program.  Otherwise, it will run forever.
+
+I am not the author of [WyzeUpdater](https://github.com/HclX/WyzeUpdater) so I'm not the best person to ask for support.  If you have issues serving this update file to a particular model camera or a particular firmware revision, I may or may not be able to help.
+
 ## Advanced Usage
+
+**WARNING**: Do not modify the tar file unless you are **very sure** you know what you are doing.  The binary file inside the tar file is NOT a `demo.bin` image.  It is a bootloader image.  Replacing it with something that is not a bootloader binary (ie, `demo.bin`) will **brick your unit.**
 
 The binary bundle is a simple .tar file of the `Upgrade` directory in this repository.  You can modify the script, change the bootloader image, etc.  However, the `Upgrade/upgraderun.sh` script is the main entry point for the app-based updater, and the `Upgrade/PARA` file appears to be mandatory.  
 
@@ -63,6 +69,10 @@ The update process writes 2 files to the SD card.  (You did put a FAT32 formatte
 
 - The log file may have clues as to what went wrong.  
 - If you copy the old bootloader off the card and repeat the update process, you should end up with an identical bootloader to the one in the Update directory.  If that's the case, the bootloader flash was successful, and your issue is likely elsewhere.
+
+## I'm on Windows, how do I Python?
+
+I'm probably the wrong person to ask about this, since all the Python code belongs to HclX's WyzeUpdater tool.  It is possible to use this tool on Windows, but you will have to install Python (and probably run `pip install` to get the packages WyzeUpdater requires).  
 
 # Technical Details
 
