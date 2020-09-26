@@ -10,19 +10,24 @@ This script takes (what I consider to be) appropriate precautions, but since it 
 
 ## Quick Install
 
-Set up the camera and pair it with the Wyze app.  Verify that the Wyze app shows it as online.
+- Set up the camera and pair it with the Wyze app.  
+- Verify that the Wyze app shows it as online.
+- A SD card is required!  Insert an SD card into the camera (used for backing up the previous bootloader image).
+- Follow the instructions to set up [WyzeUpdater](https://github.com/HclX/WyzeUpdater) so that it can find your camera in `wyze_updater.py list`. 
 
-Insert an SD card (used for backing up the previous bootloader image)
-
-Follow the instructions to set up [WyzeUpdater](https://github.com/HclX/WyzeUpdater) so that it can find your camera in `wyze_updater.py list`. 
-
-Then you can download the latest release of the binary bundle, and tell WyzeUpdater to push it to your camera.  The instructions may vary if WyzeUpdater changes, but as of this writing:
+Then you can download the latest release of the binary bundle [from this page](https://github.com/agent86ix/wyze-cam-pan-sd-flash-fix/releases), and tell WyzeUpdater to push it to your camera.  The instructions may vary if WyzeUpdater changes, but as of this writing:
 
 ```
-python wyze_updater.py update -d $CAMERA_MAC -f path/to/pan-fix.tar
+python wyze_updater.py update -p 18080 -d $CAMERA_MAC -f path/to/pan-fix.tar
 ```
+
+This will start a small web server on your machine, and then attempt to trigger the same update flow as the app on your camera.  You should see a couple of requests printed from the camera, (one ending in `firmware.bin`).  Afterwards, the camera should reboot shortly after.  Once it has, you can exit (Ctrl-C) the WyzeUpdater program.  Otherwise, it will run forever.
+
+I am not the author of [WyzeUpdater](https://github.com/HclX/WyzeUpdater) so I'm not the best person to ask for support if you have trouble running the tool.  If you have issues serving this update file to a particular model camera or a particular firmware revision, I may or may not be able to help.
 
 ## Advanced Usage
+
+**WARNING**: Do not modify the tar file unless you are **very sure** you know what you are doing.  The binary file inside the tar file is NOT a `demo.bin` image.  It is a bootloader image.  Replacing it with something that is not a bootloader binary (ie, `demo.bin`) will **brick your unit.**
 
 The binary bundle is a simple .tar file of the `Upgrade` directory in this repository.  You can modify the script, change the bootloader image, etc.  However, the `Upgrade/upgraderun.sh` script is the main entry point for the app-based updater, and the `Upgrade/PARA` file appears to be mandatory.  
 
@@ -44,7 +49,7 @@ The symptoms of this issue are that even if you properly [follow the instruction
 
 The short answer is "No."  The longer answer is "Well, not really."
 
-This doesn't install any 3rd party software (ie, this does *not* install [Dafang Hacks](https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks)) on your camera.  It simply installs another official Wyze bootloader, one taken from a Wyze Cam v2, supplied by @tachang as part of [openmiko.](https://github.com/openmiko/openmiko/blob/master/stock_firmware/wyzecam_v2/wyzecam_v2_stock_bootloader.bin)
+This doesn't install any 3rd party software (ie, this does *not* install [Dafang Hacks](https://github.com/EliasKotlyar/Xiaomi-Dafang-Hacks)) on your camera.  It simply installs another official Wyze bootloader, one taken from a Wyze Cam v2, supplied by @tachang as part of [openmiko.](https://github.com/openmiko/openmiko/blob/master/stock_firmware/wyzecam_v2/wyzecam_v2_stock_bootloader.bin).  I have confirmed that this is the same bootloader image (same md5sum) as an older Wyze Cam Pan that did not have this issue.
 
 Once this "fix" has been applied, you should be able to flash any Wyze firmware or any compatible "hacked" firmware using the "`demo.bin` on the SD card" method.
 
@@ -63,6 +68,10 @@ The update process writes 2 files to the SD card.  (You did put a FAT32 formatte
 
 - The log file may have clues as to what went wrong.  
 - If you copy the old bootloader off the card and repeat the update process, you should end up with an identical bootloader to the one in the Update directory.  If that's the case, the bootloader flash was successful, and your issue is likely elsewhere.
+
+## I'm on Windows, how do I Python?
+
+I'm probably the wrong person to ask about this, since all the Python code belongs to HclX's WyzeUpdater tool.  It is possible to use this tool on Windows, but you will have to install Python (and probably run `pip install` to get the packages WyzeUpdater requires).  
 
 # Technical Details
 
